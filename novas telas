@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EcoCare Hospitalar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>Login</h2>
+  <input id="loginNome" placeholder="Nome">
+  <select id="loginTipo">
+    <option>Enfermeiro</option>
+    <option>Médico</option>
+    <option>Técnico</option>
+    <option>Admin</option>
+  </select>
+  <button onclick="login()">Entrar</button>
+</div>
+
+<!-- SISTEMA -->
+<div id="app" style="display:none">
+
+<h1>EcoCare Hospitalar</h1>
+
+<h2>Cadastrar Paciente</h2>
+<input id="nome" placeholder="Nome">
+<select id="tipo">
+  <option>Clínico</option>
+  <option>Cirúrgico</option>
+  <option>UTI</option>
+</select>
+<input id="leito" placeholder="Leito">
+<button onclick="addPaciente()">Cadastrar</button>
+
+<h2>Pacientes</h2>
+<ul id="listaPacientes"></ul>
+
+<h2>Registrar Descarte</h2>
+<select id="pacienteSelect"></select>
+<input id="material" placeholder="Material">
+<input id="quantidade" type="number" placeholder="Quantidade">
+<button onclick="registrarDescarte()">Registrar</button>
+
+<h3 id="alerta"></h3>
+
+<h2>Relatório (Admin)</h2>
+<button onclick="gerarRelatorio()">Gerar</button>
+<div id="relatorio"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
