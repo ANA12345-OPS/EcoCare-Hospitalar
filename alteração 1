@@ -1,0 +1,104 @@
+let pacientes = [];
+let descartes = [];
+let usuarioAtual = null;
+
+// Médias padrão
+let medias = {
+  "Clínico": { "luva": 15, "gaze": 10 },
+  "Cirúrgico": { "luva": 25, "gaze": 20 },
+  "UTI": { "luva": 30, "seringa": 35 }
+};
+
+// LOGIN SIMPLES
+function login() {
+  let nome = document.getElementById("loginNome").value;
+  let tipo = document.getElementById("loginTipo").value;
+
+  usuarioAtual = { nome, tipo };
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}
+
+// CADASTRAR PACIENTE
+function addPaciente() {
+  let nome = document.getElementById("nome").value;
+  let tipo = document.getElementById("tipo").value;
+  let leito = document.getElementById("leito").value;
+
+  pacientes.push({ nome, tipo, leito });
+  atualizarLista();
+  listarPacientes();
+}
+
+// ATUALIZA SELECT
+function atualizarLista() {
+  let select = document.getElementById("pacienteSelect");
+  select.innerHTML = "";
+
+  pacientes.forEach((p, index) => {
+    let option = document.createElement("option");
+    option.value = index;
+    option.text = p.nome + " (" + p.tipo + ")";
+    select.appendChild(option);
+  });
+}
+
+// LISTA DE PACIENTES
+function listarPacientes() {
+  let lista = document.getElementById("listaPacientes");
+  lista.innerHTML = "";
+
+  pacientes.forEach(p => {
+    let item = document.createElement("li");
+    item.innerText = `${p.nome} - ${p.tipo} - Leito ${p.leito}`;
+    lista.appendChild(item);
+  });
+}
+
+// REGISTRAR DESCARTE
+function registrarDescarte() {
+  let index = document.getElementById("pacienteSelect").value;
+  let material = document.getElementById("material").value.toLowerCase();
+  let quantidade = Number(document.getElementById("quantidade").value);
+
+  let paciente = pacientes[index];
+  let media = medias[paciente.tipo]?.[material];
+
+  let alerta = document.getElementById("alerta");
+
+  if (!media) {
+    alerta.innerText = "⚠️ Material sem média cadastrada";
+    alerta.style.color = "orange";
+    return;
+  }
+
+  if (quantidade > media) {
+    alerta.innerText = `⚠️ Acima do esperado! Média: ${media}`;
+    alerta.style.color = "red";
+  } else {
+    alerta.innerText = "Consumo dentro do esperado";
+    alerta.style.color = "green";
+  }
+
+  // salva descarte
+  descartes.push({
+    paciente: paciente.nome,
+    leito: paciente.leito,
+    colaborador: usuarioAtual.nome,
+    material,
+    quantidade
+  });
+}
+
+// RELATÓRIO (ADMIN)
+function gerarRelatorio() {
+  let div = document.getElementById("relatorio");
+  div.innerHTML = "<h3>Relatório</h3>";
+
+  descartes.forEach(d => {
+    let item = document.createElement("p");
+    item.innerText = `${d.colaborador} | Leito ${d.leito} | ${d.material} - ${d.quantidade}`;
+    div.appendChild(item);
+  });
+}
